@@ -1,8 +1,8 @@
 # todo
 
-- create the nestjs backend
-- set up drizzle ORM
-  - shared types?
+- set up database
+- create chatbot in nestjs backend
+- set up drizzle ORM shared types
 - create frontend browser source
 - github actions for deployment
 - [LATER] figure out electron app
