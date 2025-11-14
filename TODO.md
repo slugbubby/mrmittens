@@ -1,7 +1,10 @@
 # todo
 
-- set up database
+- **slug homework**: read up on nestjs
 - create chatbot in nestjs backend
+  - read chat messages from twitch
+  - add users and tasks if someone does !task
+  - add functionality for !done
 - set up drizzle ORM shared types
 - create frontend browser source
 - github actions for deployment
@@ -10,6 +13,7 @@
 # completed
 
 - initialize monorepo
+- set up database + drizzl (4hr51min stream yay)
 
 # features (hopefully)
 
