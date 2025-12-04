@@ -8,6 +8,8 @@
 - create frontend browser source
 - github actions for deployment
 - [LATER] figure out electron app
+- error handling
+  - when bot can't send message
 
 # completed
 
