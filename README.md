@@ -2,6 +2,10 @@
 
 _slugbubby's stream helper_
 
+## Setup
+
+1. Run `pnpm install` from the monorepo root
+
 ## Architecture Overview
 
 **Frontend**

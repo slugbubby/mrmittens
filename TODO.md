@@ -1,5 +1,6 @@
 # todo
 
+- fix typescript imports in apps/server
 - create chatbot in nestjs backend
   - read chat messages from twitch
   - add users and tasks if someone does !task
@@ -15,7 +16,7 @@
 
 - initialize monorepo
 - set up database + drizzl (4hr51min stream yay)
-  - db is in wsl vm. check if db is up: `psql -h localhost -U admin -d mittensdb`
+  - db is in wsl vm. connect to db: `psql -h localhost -U postgres -d mittensdb`
 - set up twitch bot
   - https://twurple.js.org/docs/examples/chat/basic-bot.html for token stuff
   - it's now listening and we made an example command!

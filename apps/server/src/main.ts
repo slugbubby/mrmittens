@@ -16,12 +16,12 @@ async function bootstrap() {
   });
 
   const tokenData = JSON.parse(
-    await fs.readFile('./tokens.slugbot.json', 'utf-8'),
+    await fs.readFile('./tokens.notslugbubby.json', 'utf-8'),
   ) as AccessToken;
 
   twurpleAuth.onRefresh(async (userId, newTokenData) => {
     await fs.writeFile(
-      './tokens.slugbot.json',
+      './tokens.notslugbubby.json',
       JSON.stringify(newTokenData, null, 4),
       'utf-8',
     );
@@ -38,8 +38,12 @@ async function bootstrap() {
         await reply(`You rolled a ${diceRoll}`);
       }),
       createBotCommand('slap', async (params, { userName, say }) => {
+        const size = ['small', 'tiny', 'large', 'gigantic', 'huge', 'adequately sized']
+        const fish = ['trout', 'goldfish', 'mackerel', 'salmon', 'koi', 'tuna', 'lobster']
+        const sizeIndex = Math.floor(Math.random() * size.length)
+        const fishIndex = Math.floor(Math.random() * fish.length)
         await say(
-          `${userName} slaps ${params.join(' ')} around a bit with a large trout`,
+          `${userName} slaps ${params.join(' ')} around a bit with a ${size[sizeIndex]} ${fish[fishIndex]}`,
         );
       }),
     ],
