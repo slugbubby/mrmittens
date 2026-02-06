@@ -17,8 +17,8 @@ _slugbubby's stream helper_
 **Backend**
 
 - NestJS
-- @twurple/auth, @twurple/eventsub-ws, @twurple/bot
 - Drizzle ORM, drizzle-kit
+- @twurple/auth, @twurple/eventsub-ws, @twurple/bot
 
 **Hosting**
 

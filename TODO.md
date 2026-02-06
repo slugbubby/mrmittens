@@ -1,6 +1,5 @@
 # todo
 
-- fix typescript imports in apps/server
 - create chatbot in nestjs backend
   - read chat messages from twitch
   - add users and tasks if someone does !task

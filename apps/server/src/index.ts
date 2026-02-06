@@ -1,37 +1,44 @@
-// https://orm.drizzle.team/docs/get-started/postgresql-new
-
+import { NestFactory } from '@nestjs/core';
+import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
+import { Bot } from '@twurple/easy-bot';
 import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { eq } from 'drizzle-orm';
+import { promises as fs } from 'fs';
 
-import { usersTable } from './db/schema';
+import { AppModule } from './app.module';
+import { slap, task } from './chatbot';
 
-const db = drizzle(process.env.DATABASE_URL!);
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(process.env.PORT ?? 3000);
 
-async function main() {
-  const user: typeof usersTable.$inferInsert = {
-    id: '1',
-    twitchId: '123456789',
-    twitchUsername: 'slugbubby',
-    displayName: 'slugbubby',
-  };
+  const twurpleAuth = new RefreshingAuthProvider({
+    clientId: process.env.TWITCH_CLIENT_ID!,
+    clientSecret: process.env.TWITCH_CLIENT_SECRET!,
+  });
 
-  await db.insert(usersTable).values(user);
-  console.log('New user created!');
-  const users = await db.select().from(usersTable);
-  console.log('Getting all users from the database: ', users);
+  const tokenData = JSON.parse(
+    await fs.readFile('./tokens.notslugbubby.json', 'utf-8'),
+  ) as AccessToken;
 
-  await db
-    .update(usersTable)
-    .set({
-      id: '2',
-    })
-    .where(eq(usersTable.twitchUsername, user.twitchUsername));
-  console.log('User info updated!');
-  await db
-    .delete(usersTable)
-    .where(eq(usersTable.twitchUsername, user.twitchUsername));
-  console.log('User deleted!');
+  twurpleAuth.onRefresh(async (userId, newTokenData) => {
+    await fs.writeFile(
+      './tokens.notslugbubby.json',
+      JSON.stringify(newTokenData, null, 4),
+      'utf-8',
+    );
+  });
+
+  await twurpleAuth.addUserForToken(tokenData, ['chat']);
+
+  const bot = new Bot({
+    authProvider: twurpleAuth,
+    channels: ['slugbubby'],
+    commands: [slap, task],
+  });
+
+  bot.onMessage((messageEvent) => {
+    // messageEvent.reply('noted');
+  });
 }
 
-main();
+bootstrap();

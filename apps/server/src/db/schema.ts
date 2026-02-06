@@ -1,11 +1,11 @@
-// to test migration locally: npx drizzle-kit push
-// then psql -h localhost -U admin -d mittensdb and "\dt" in db to see tables
+// to test migration locally: pnpm drizzle-kit push
+// then psql -h localhost -U postgres -d mittensdb and "\dt" in db to see tables
 // https://orm.drizzle.team/docs/get-started/postgresql-new#step-6---applying-changes-to-the-database
 
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   twitchId: text('twitch_id').notNull().unique(),
   twitchUsername: text('twitch_username').notNull(),
   displayName: text('display_name').notNull(),
@@ -14,8 +14,8 @@ export const usersTable = pgTable('users', {
 });
 
 export const tasksTable = pgTable('tasks', {
-  id: serial('id').primaryKey(),
-  userId: text('user_id')
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
     .references(() => usersTable.id)
     .notNull(),
   text: text('text').notNull(),
@@ -24,9 +24,9 @@ export const tasksTable = pgTable('tasks', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const Table = pgTable('messages', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
+export const messagesTable = pgTable('messages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
     .references(() => usersTable.id)
     .notNull(),
   text: text('text').notNull(),
