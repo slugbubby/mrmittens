@@ -1,9 +1,8 @@
 # todo
 
-- create chatbot in nestjs backend
-  - read chat messages from twitch
-  - add users and tasks if someone does !task
-  - add functionality for !done
+- hook up sveltekit to nestjs
+- render the tasks
+- add chatbot functionality for !done
 - set up drizzle ORM shared types
 - create frontend browser source
 - github actions for deployment
@@ -19,6 +18,8 @@
 - set up twitch bot
   - https://twurple.js.org/docs/examples/chat/basic-bot.html for token stuff
   - it's now listening and we made an example command!
+- add chatbot !task functionality
+- set up sveltekit frontend
 
 # features (hopefully)
 
