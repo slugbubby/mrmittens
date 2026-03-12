@@ -2,6 +2,7 @@
 // then psql -h localhost -U postgres -d mittensdb and "\dt" in db to see tables
 // https://orm.drizzle.team/docs/get-started/postgresql-new#step-6---applying-changes-to-the-database
 
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users', {
@@ -12,6 +13,9 @@ export const usersTable = pgTable('users', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export type User = InferSelectModel<typeof usersTable>;
+export type NewUser = InferInsertModel<typeof usersTable>;
 
 export const tasksTable = pgTable('tasks', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -24,6 +28,9 @@ export const tasksTable = pgTable('tasks', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export type Task = InferSelectModel<typeof tasksTable>;
+export type NewTask = InferInsertModel<typeof tasksTable>;
+
 export const messagesTable = pgTable('messages', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id')
@@ -35,3 +42,6 @@ export const messagesTable = pgTable('messages', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export type Message = InferSelectModel<typeof messagesTable>;
+export type NewMessage = InferInsertModel<typeof messagesTable>;

@@ -1,7 +1,6 @@
 # todo
 
-- hook up sveltekit to nestjs
-- render the tasks
+- spiffy up tasks page + !task functionality overall
 - add chatbot functionality for !done
 - set up drizzle ORM shared types
 - create frontend browser source
@@ -20,6 +19,8 @@
   - it's now listening and we made an example command!
 - add chatbot !task functionality
 - set up sveltekit frontend
+- hook up sveltekit to nestjs api calls
+- render the tasks at /tasks
 
 # features (hopefully)
 

@@ -12,7 +12,7 @@ _slugbubby's stream helper_
 
 - SvelteKit
 - Electron for desktop app
-- Vite
+- [Better-Auth](https://www.better-auth.com/)
 
 **Backend**
 
@@ -31,30 +31,27 @@ _slugbubby's stream helper_
 mr-mittens/
 ├── .github/
 │   └── workflows/
-│       ├── server.yml
 │       ├── client.yml
-│       └── desktop.yml
+│       ├── desktop.yml
+│       └── server.yml
 ├── apps/
 │   ├── server/
-│   │   ├── src/
-│   │   ├── drizzle/
-│   │   ├── package.json
-│   │   └── tsconfig.json
+│   │   └── src/
+│   │       ├── chatbot/        # Twitch chatbot commands
+│   │       ├── db/             # Drizzle database
+│   │       ├── tasks/          # NestJs modules
+│   │       └── main.ts         # NestJs entry file
 │   ├── client/
-│   │   ├── src/
-│   │   ├── package.json
-│   │   └── svelte.config.js
+│   │   └── src/
+│   │       ├── routes/         # Svelte page routes
+│   │       └── app.html        # Homepage
 │   └── desktop/
 │       ├── electron/
-│       ├── src/
-│       ├── package.json
-│       └── electron.vite.config.ts
+│       └── src/
 ├── packages/
 │   └── shared/
-│       ├── src/
-│       │   └── types/
-│       ├── package.json
-│       └── tsconfig.json
+│       └── src/
+│           └── types/
 ├── package.json
 ├── pnpm-workspace.yaml
 └── turbo.json

@@ -1,6 +1,7 @@
 import { createBotCommand } from '@twurple/easy-bot';
 
-import { createTask, createUser, getUser } from '../db';
+import { createTask } from '../db/tasks';
+import { createUser, fetchUser } from '../db/users';
 
 export const slap = createBotCommand(
   'slap',
@@ -40,14 +41,15 @@ export const slap = createBotCommand(
 
 export const task = createBotCommand(
   'task',
-  async (params, { userId, userName, userDisplayName, say }) => {
-    let user = await getUser(userId);
+  async (params, { userId, userName, userDisplayName, reply }) => {
+    let user = await fetchUser(userId);
     if (!user) {
       user = await createUser(userId, userName, userDisplayName);
     }
     const taskText = params.join(' ');
-    if (!!user) {
-      createTask(user.id, taskText);
+    const task = await createTask(user.id, taskText);
+    if (!!task) {
+      await reply('your task has been added lil bro');
     }
   },
 );
