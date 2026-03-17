@@ -1,8 +1,20 @@
+/**
+ * Twitch chatbot command handlers.
+ *
+ * Each export is a Twurple `BotCommand` registered in {@link ../main.ts}.
+ * Commands are triggered when a viewer types `!<name>` in chat.
+ */
+
 import { createBotCommand } from '@twurple/easy-bot';
 
 import { createTask } from '../db/tasks';
 import { createUser, fetchUser } from '../db/users';
 
+/**
+ * `!slap <target>` -- A fun chat command.
+ * Picks a random size + fish combo and announces that the sender
+ * slapped the target with it. Pure entertainment, no side effects.
+ */
 export const slap = createBotCommand(
   'slap',
   async (params, { userName, say }) => {
@@ -39,6 +51,13 @@ export const slap = createBotCommand(
   },
 );
 
+/**
+ * `!task <description>` -- Create a stream task from chat.
+ *
+ * Looks up (or auto-creates) the viewer in the DB, then inserts a new
+ * task row. The task shows up on the `/tasks` frontend page which is
+ * used as an OBS browser source overlay.
+ */
 export const task = createBotCommand(
   'task',
   async (params, { userId, userName, userDisplayName, reply }) => {
