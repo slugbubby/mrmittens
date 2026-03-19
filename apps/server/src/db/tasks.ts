@@ -2,15 +2,19 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 
-import { NewTask, Task, tasksTable } from './schema';
+import * as schema from './schema';
+import { NewTask, Task, tasksTable, User } from './schema';
 
-const db = drizzle(process.env.DATABASE_URL!);
+const db = drizzle(process.env.DATABASE_URL!, { schema });
+
+type TaskWithUser = Task & { user: User };
 
 export const fetchTasks = async (options?: {
   done: boolean;
-}): Promise<Task[]> => {
-  const tasks = await db.select().from(tasksTable);
-  // .where(eq(tasksTable.doneAt, userTwitchId));
+}): Promise<TaskWithUser[]> => {
+  const tasks = db.query.tasksTable.findMany({
+    with: { user: true },
+  });
 
   return tasks;
 };

@@ -2,9 +2,13 @@
   let { data } = $props();
 </script>
 
-{#each data.tasks as task}
+{#each Object.keys(data.tasksByUser) as user}
   <div>
-    <h2>{task.userId}</h2>
-    <p>{task.text}</p>
+    <h2>{user}</h2>
+    <ul>
+      {#each data.tasksByUser[user] as task}
+        <li>{task.text}</li>
+      {/each}
+    </ul>
   </div>
 {/each}

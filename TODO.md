@@ -1,5 +1,7 @@
 # todo
 
+- share drizzl types across packages
+  - clean up frontend code + types
 - spiffy up tasks page + !task functionality overall
 - add chatbot functionality for !done
 - set up drizzle ORM shared types

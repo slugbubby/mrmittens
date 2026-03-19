@@ -2,7 +2,7 @@
 // then psql -h localhost -U postgres -d mittensdb and "\dt" in db to see tables
 // https://orm.drizzle.team/docs/get-started/postgresql-new#step-6---applying-changes-to-the-database
 
-import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
+import { InferSelectModel, InferInsertModel, relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users', {
@@ -45,3 +45,14 @@ export const messagesTable = pgTable('messages', {
 
 export type Message = InferSelectModel<typeof messagesTable>;
 export type NewMessage = InferInsertModel<typeof messagesTable>;
+
+export const tasksRelations = relations(tasksTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [tasksTable.userId],
+    references: [usersTable.id],
+  }),
+}));
+
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  tasks: many(tasksTable),
+}));

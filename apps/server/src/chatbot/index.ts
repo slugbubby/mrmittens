@@ -39,6 +39,18 @@ export const slap = createBotCommand(
   },
 );
 
+export const suplex = createBotCommand(
+  'suplex',
+  async (params, { userName, say }) => {
+    await say(
+      `${userName} grabs ${params.join(' ')} firmly, with double underhooks, 
+      interlocking their torsos. Gravity conductor? First stop: the sky! Final
+      destination? DIRT. EAT THE HOT, HARD, SANDY FLOOR WITH YOUR ROCK OF A BIG
+      HEAD. Attention chatter, you have arrived at Suplex City.`,
+    );
+  },
+);
+
 export const task = createBotCommand(
   'task',
   async (params, { userId, userName, userDisplayName, reply }) => {
