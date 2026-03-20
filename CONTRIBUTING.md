@@ -13,27 +13,31 @@ Thanks for your interest in contributing! This guide will get you up and running
 
 ## Getting Started
 
+### Windows one-shot setup
+
+From the repo root:
+
+```powershell
+.\scripts\onboarding.cmd
+```
+
+This installs Scoop when needed, ensures Node.js 20+ and pnpm are ready, installs Twitch CLI and Vercel CLI, creates missing `.env` files from the checked-in examples, and runs `pnpm install` for the workspace.
+
+### Manual setup steps after onboarding
+
 ```bash
-# 1. Clone the repo
-git clone https://github.com/<your-fork>/mrmittens.git
-cd mrmittens
-
-# 2. Install dependencies (uses pnpm workspaces)
-pnpm install
-
-# 3. Set up environment variables
-cp apps/server/.env.example apps/server/.env
-cp apps/client/.env.example apps/client/.env
-# Then edit both .env files with your actual values
-
-# 4. Push the DB schema to your local PostgreSQL
+# 1. Push the DB schema to your local PostgreSQL
 pnpm --filter @mrmittens/server db:push
 
-# 5. Start everything in dev mode (Turborepo runs client + server)
+# 2. Start everything in dev mode (Turborepo runs client + server)
 pnpm dev
 ```
 
+Then edit both `.env` files with your real values.
+
 The server starts at `http://localhost:3000` and the client at `http://localhost:5173`.
+
+There is no Electron desktop workspace in this branch yet, so onboarding currently covers the web client and backend only.
 
 ## Project Structure
 

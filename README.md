@@ -29,15 +29,44 @@ Viewers type `!task fix the bug` in chat and the task appears on an OBS browser-
 | Chatbot | Twurple (auth, easy-bot) |
 | Hosting | Vercel (client), Render.com (server + DB) |
 
+## Getting Started
+
+### Windows onboarding
+
+Run the onboarding script from the repo root on Windows:
+
+```powershell
+.\scripts\onboarding.cmd
+```
+
+Or call PowerShell directly:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\onboarding.ps1
+```
+
+The script is idempotent and will:
+
+- install Scoop if it is missing
+- install Node.js LTS if the machine does not already have Node.js 20+
+- enable `pnpm` via Corepack
+- install Twitch CLI and Vercel CLI
+- create `apps/server/.env` and `apps/client/.env` from the existing examples when needed
+- run `pnpm install` for the workspace
+
+Manual prerequisites still required after onboarding:
+
+- PostgreSQL 15+ running locally, or an accessible PostgreSQL instance
+- a Twitch application plus a bot token file at `apps/server/tokens.notslugbubby.json`
+- `vercel login` before deploying the web client
+
 ## Quick Start
 
 ```bash
-# Install dependencies
-pnpm install
+# Windows: run the onboarding script first
+./scripts/onboarding.cmd
 
-# Copy env files and fill in your values
-cp apps/server/.env.example apps/server/.env
-cp apps/client/.env.example apps/client/.env
+# Fill in your local env values
 
 # Push DB schema to PostgreSQL
 pnpm --filter @mrmittens/server db:push
@@ -124,8 +153,11 @@ Run from the monorepo root:
 | Command | Description |
 |---------|-------------|
 | `pnpm dev` | Start client + server in dev mode |
+| `pnpm --filter @mrmittens/server start:dev` | Start only the NestJS backend |
+| `pnpm --filter client dev` | Start only the SvelteKit web client |
 | `pnpm build` | Build all apps |
 | `pnpm lint` | Lint all apps |
+| `pnpm onboarding:windows` | Run the Windows onboarding wrapper |
 
 ## License
 

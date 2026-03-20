@@ -79,7 +79,7 @@ export const task = createBotCommand(
     }
     const taskText = params.join(' ');
     const task = await createTask(user.id, taskText);
-    if (!!task) {
+    if (task) {
       await reply('your task has been added lil bro');
     }
   },

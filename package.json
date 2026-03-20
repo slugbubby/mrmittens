@@ -2,7 +2,9 @@
   "name": "mrmittens",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
+    "onboarding:windows": ".\\scripts\\onboarding.cmd",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint"
