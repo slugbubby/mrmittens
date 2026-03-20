@@ -24,6 +24,11 @@ function Write-Success {
   Write-Host "[ok] $Message" -ForegroundColor Green
 }
 
+function Write-WarningMessage {
+  param([string]$Message)
+  Write-Host "[warn] $Message" -ForegroundColor Yellow
+}
+
 function Get-EnvValue {
   param(
     [string]$FilePath,
@@ -105,9 +110,81 @@ function Prompt-EnvValue {
   Set-EnvValue -FilePath $FilePath -Key $Key -Value $finalValue
 }
 
+function Test-PlaceholderValue {
+  param([string]$Value)
+
+  if ([string]::IsNullOrWhiteSpace($Value)) {
+    return $true
+  }
+
+  $normalizedValue = $Value.Trim().ToLowerInvariant()
+  $placeholderPatterns = @(
+    'your_',
+    'changeme',
+    'example',
+    'placeholder',
+    '<hidden>',
+    'postgres:password',
+    'streamer_login',
+    'streamer display'
+  )
+
+  foreach ($pattern in $placeholderPatterns) {
+    if ($normalizedValue.Contains($pattern)) {
+      return $true
+    }
+  }
+
+  return $false
+}
+
+function Validate-EnvValues {
+  $checks = @(
+    @{ File = $ServerEnvPath; Key = 'DATABASE_URL'; Label = 'Server DATABASE_URL' },
+    @{ File = $ServerEnvPath; Key = 'TWITCH_CLIENT_ID'; Label = 'Twitch client ID' },
+    @{ File = $ServerEnvPath; Key = 'TWITCH_CLIENT_SECRET'; Label = 'Twitch client secret' },
+    @{ File = $ServerEnvPath; Key = 'TWITCH_CHANNEL_USERNAME'; Label = 'Twitch channel username' },
+    @{ File = $ServerEnvPath; Key = 'TWITCH_TOKEN_PATH'; Label = 'Twitch token path' },
+    @{ File = $ClientEnvPath; Key = 'API_URL'; Label = 'Client API_URL' }
+  )
+
+  $warnings = New-Object System.Collections.Generic.List[string]
+
+  foreach ($check in $checks) {
+    $value = Get-EnvValue -FilePath $check.File -Key $check.Key
+    if (Test-PlaceholderValue $value) {
+      $warnings.Add("$($check.Label) still looks like a placeholder.")
+    }
+  }
+
+  $tokenPath = Get-EnvValue -FilePath $ServerEnvPath -Key 'TWITCH_TOKEN_PATH'
+  if (-not (Test-PlaceholderValue $tokenPath)) {
+    $absoluteTokenPath = if ([System.IO.Path]::IsPathRooted($tokenPath)) {
+      $tokenPath
+    }
+    else {
+      Join-Path (Join-Path $RepoRoot 'apps/server') $tokenPath
+    }
+
+    if (-not (Test-Path $absoluteTokenPath)) {
+      $warnings.Add("Twitch token file was not found yet at $tokenPath.")
+    }
+  }
+
+  if ($warnings.Count -eq 0) {
+    Write-Success 'Env validation looks good. Nothing obviously placeholder-shaped survived.'
+    return
+  }
+
+  Write-WarningMessage 'Some values still need attention before the bot is truly stream-ready:'
+  foreach ($warning in $warnings) {
+    Write-Host "  - $warning"
+  }
+}
+
 function Show-Help {
   Write-Host 'slugBot commands:' -ForegroundColor Cyan
-  Write-Host '  slugBot onboard    Install tooling, create env files, and prompt for local config.'
+  Write-Host '  slugBot onboard    Install tooling, prompt for env values, and warn about placeholders.'
 }
 
 function Invoke-Onboard {
@@ -130,6 +207,7 @@ function Invoke-Onboard {
   Prompt-EnvValue -FilePath $ClientEnvPath -Key 'API_URL' -Prompt 'Client API_URL' -DefaultValue 'http://localhost:3000'
 
   Write-Success 'Local .env files are configured.'
+  Validate-EnvValues
   Write-Host ''
   Write-Host 'Next:' -ForegroundColor Cyan
   Write-Host '  1. Generate the Twitch token JSON at the path in TWITCH_TOKEN_PATH.'

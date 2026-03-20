@@ -29,7 +29,13 @@ If you want the repo to prompt you through the important `.env` values too, run:
 .\slugBot.cmd onboard
 ```
 
-That wraps onboarding and then helps configure the streamer/channel variables locally. In plain English: it is the repo-local version of `slugBot onboard`.
+That wraps onboarding, helps configure the streamer/channel variables locally, and warns if placeholder env values are still lurking in your setup. In plain English: it is the repo-local version of `slugBot onboard`.
+
+Important Twitch identity detail:
+
+- `TWITCH_CHANNEL_USERNAME` tells the bot which channel to join
+- the bot talks in chat as the Twitch account used to create the token file in `TWITCH_TOKEN_PATH`
+- use a separate Twitch account if you want the bot to show up under its own username instead of the streamer account
 
 ### Manual setup steps after onboarding
 
@@ -147,7 +153,7 @@ The file is auto-refreshed at runtime -- you only need to create it once.
 | `TWITCH_CLIENT_SECRET` | Yes | Twitch OAuth client secret |
 | `TWITCH_CHANNEL_USERNAME` | Yes | Twitch login/channel name the bot should join |
 | `TWITCH_CHANNEL_DISPLAY_NAME` | No | Friendly display name used in local logs and setup |
-| `TWITCH_TOKEN_PATH` | Yes | Path to the Twitch refresh token JSON file |
+| `TWITCH_TOKEN_PATH` | Yes | Path to the Twitch refresh token JSON file; this token decides which Twitch account the bot speaks as |
 
 ### Client (`apps/client/.env`)
 

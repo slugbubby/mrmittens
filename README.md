@@ -70,7 +70,7 @@ If you want a guided setup that fills in the `.env` values too, use the local CL
 
 That is the Windows-friendly version of running `slugBot onboard` from the repo checkout.
 
-That command runs the onboarding script, then prompts for the important values like:
+That command runs the onboarding script, prompts for the important values, and warns you if placeholder values are still hanging around like they pay rent:
 
 - `DATABASE_URL`
 - `TWITCH_CLIENT_ID`
@@ -79,6 +79,12 @@ That command runs the onboarding script, then prompts for the important values l
 - `TWITCH_CHANNEL_DISPLAY_NAME`
 - `TWITCH_TOKEN_PATH`
 - `API_URL`
+
+Bot identity note:
+
+- `TWITCH_CHANNEL_USERNAME` is the channel the bot joins
+- the bot appears in chat as the Twitch account whose token lives at `TWITCH_TOKEN_PATH`
+- if you want a dedicated bot name in chat, create a separate Twitch bot account and generate the token file for that account
 
 ## Quick Start
 
