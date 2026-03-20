@@ -1,8 +1,52 @@
+/**
+ * Twitch chatbot command handlers.
+ *
+ * Each export is a Twurple `BotCommand` registered in {@link ../main.ts}.
+ * Commands are triggered when a viewer types `!<name>` in chat.
+ */
+
 import { createBotCommand } from '@twurple/easy-bot';
 
-import { createTask } from '../db/tasks';
-import { createUser, fetchUser } from '../db/users';
+import { safeReply } from './chat-messaging';
+import {
+  handleDoneCommand,
+  handleTaskCommand,
+  type ChatIdentity,
+  type TaskCommandRepository,
+} from './task-command.handlers';
+import {
+  createTask,
+  fetchOpenTasks,
+  fetchOpenTasksForUser,
+  markTaskDone,
+} from '../db/tasks';
+import { createUser, fetchUser, updateUser } from '../db/users';
 
+const taskCommandRepository: TaskCommandRepository = {
+  fetchUserByTwitchId: fetchUser,
+  createUser,
+  updateUser,
+  createTask,
+  fetchOpenTasks,
+  fetchOpenTasksForUser,
+  markTaskDone,
+};
+
+const createIdentity = (context: {
+  userId: string;
+  userName: string;
+  userDisplayName: string;
+}): ChatIdentity => ({
+  userId: context.userId,
+  userName: context.userName,
+  userDisplayName: context.userDisplayName,
+});
+
+/**
+ * `!slap <target>` -- A fun chat command.
+ * Picks a random size + fish combo and announces that the sender
+ * slapped the target with it. Pure entertainment, no side effects.
+ */
 export const slap = createBotCommand(
   'slap',
   async (params, { userName, say }) => {
@@ -51,17 +95,35 @@ export const suplex = createBotCommand(
   },
 );
 
+/**
+ * `!task <description>` -- Create a stream task from chat.
+ *
+ * Looks up (or auto-creates) the viewer in the DB, then inserts a new
+ * task row. The task shows up on the `/tasks` frontend page which is
+ * used as an OBS browser source overlay.
+ */
 export const task = createBotCommand(
   'task',
-  async (params, { userId, userName, userDisplayName, reply }) => {
-    let user = await fetchUser(userId);
-    if (!user) {
-      user = await createUser(userId, userName, userDisplayName);
-    }
-    const taskText = params.join(' ');
-    const task = await createTask(user.id, taskText);
-    if (!!task) {
-      await reply('your task has been added lil bro');
-    }
+  async (params, context) => {
+    const result = await handleTaskCommand(
+      taskCommandRepository,
+      createIdentity(context),
+      params,
+    );
+
+    await safeReply(context.reply, result.message);
+  },
+);
+
+export const done = createBotCommand(
+  'done',
+  async (params, context) => {
+    const result = await handleDoneCommand(
+      taskCommandRepository,
+      createIdentity(context),
+      params,
+    );
+
+    await safeReply(context.reply, result.message);
   },
 );
