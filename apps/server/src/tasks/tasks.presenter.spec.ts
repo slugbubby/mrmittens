@@ -2,6 +2,16 @@ import type { DbTaskWithUserRecord } from '@mrmittens/shared';
 
 import { buildTasksOverlayResponse } from './tasks.presenter';
 
+const primaryStreamer = {
+  twitchUsername: 'streamer_login',
+  displayName: 'Streamer Display',
+};
+
+const guestStreamer = {
+  twitchUsername: 'guest_login',
+  displayName: 'Guest Display',
+};
+
 const createTask = (
   overrides: Partial<DbTaskWithUserRecord> = {},
 ): DbTaskWithUserRecord => ({
@@ -14,8 +24,8 @@ const createTask = (
   user: {
     id: 'user-1',
     twitchId: 'viewer-1',
-    twitchUsername: 'slugbubby',
-    displayName: 'Slugbubby',
+    twitchUsername: primaryStreamer.twitchUsername,
+    displayName: primaryStreamer.displayName,
     createdAt: new Date('2026-01-01T00:00:00.000Z'),
     updatedAt: new Date('2026-01-01T00:00:00.000Z'),
   },
@@ -33,8 +43,8 @@ describe('buildTasksOverlayResponse', () => {
         user: {
           id: 'user-2',
           twitchId: 'viewer-2',
-          twitchUsername: 'joy',
-          displayName: 'Joy',
+          twitchUsername: guestStreamer.twitchUsername,
+          displayName: guestStreamer.displayName,
           createdAt: new Date('2026-01-01T00:00:00.000Z'),
           updatedAt: new Date('2026-01-01T00:00:00.000Z'),
         },

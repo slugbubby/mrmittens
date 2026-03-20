@@ -5,6 +5,11 @@ import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { TasksService } from './../src/tasks/tasks.service';
 
+const testStreamer = {
+  twitchUsername: 'streamer_login',
+  displayName: 'Streamer Display',
+};
+
 describe('TasksController (e2e)', () => {
   let app: INestApplication<App>;
 
@@ -18,8 +23,8 @@ describe('TasksController (e2e)', () => {
           createdAt: '2026-01-01T00:00:00.000Z',
           user: {
             id: 'user-1',
-            displayName: 'Slugbubby',
-            twitchUsername: 'slugbubby',
+            displayName: testStreamer.displayName,
+            twitchUsername: testStreamer.twitchUsername,
           },
         },
       ],
@@ -27,8 +32,8 @@ describe('TasksController (e2e)', () => {
         {
           user: {
             id: 'user-1',
-            displayName: 'Slugbubby',
-            twitchUsername: 'slugbubby',
+            displayName: testStreamer.displayName,
+            twitchUsername: testStreamer.twitchUsername,
           },
           tasks: [
             {
@@ -38,8 +43,8 @@ describe('TasksController (e2e)', () => {
               createdAt: '2026-01-01T00:00:00.000Z',
               user: {
                 id: 'user-1',
-                displayName: 'Slugbubby',
-                twitchUsername: 'slugbubby',
+                displayName: testStreamer.displayName,
+                twitchUsername: testStreamer.twitchUsername,
               },
             },
           ],

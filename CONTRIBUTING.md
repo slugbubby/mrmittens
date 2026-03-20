@@ -23,6 +23,14 @@ From the repo root:
 
 This installs Scoop when needed, ensures Node.js 20+ and pnpm are ready, installs Twitch CLI and Vercel CLI, creates missing `.env` files from the checked-in examples, and runs `pnpm install` for the workspace.
 
+If you want the repo to prompt you through the important `.env` values too, run:
+
+```powershell
+.\slugBot.cmd onboard
+```
+
+That wraps onboarding and then helps configure the streamer/channel variables locally. In plain English: it is the repo-local version of `slugBot onboard`.
+
 ### Manual setup steps after onboarding
 
 ```bash
@@ -118,12 +126,12 @@ pnpm format    # Prettier (server only -- client uses `pnpm --filter client form
 
 ## Twitch Bot Token Setup
 
-The bot needs a refresh token file (`tokens.notslugbubby.json`) in the server root. To generate one:
+The bot needs a refresh token file at the path configured by `TWITCH_TOKEN_PATH` (defaults to `./tokens.bot.json`). To generate one:
 
 1. Create a Twitch application at https://dev.twitch.tv/console/apps
 2. Set the redirect URL to `http://localhost:3000`
 3. Use the Twurple token generator or the Twitch CLI to obtain initial tokens
-4. Save them as `tokens.notslugbubby.json` in `apps/server/`
+4. Save them to the file path set in `TWITCH_TOKEN_PATH` inside `apps/server/.env`
 
 The file is auto-refreshed at runtime -- you only need to create it once.
 
@@ -137,6 +145,9 @@ The file is auto-refreshed at runtime -- you only need to create it once.
 | `PORT` | No | HTTP port (defaults to `3000`) |
 | `TWITCH_CLIENT_ID` | Yes | Twitch OAuth client ID |
 | `TWITCH_CLIENT_SECRET` | Yes | Twitch OAuth client secret |
+| `TWITCH_CHANNEL_USERNAME` | Yes | Twitch login/channel name the bot should join |
+| `TWITCH_CHANNEL_DISPLAY_NAME` | No | Friendly display name used in local logs and setup |
+| `TWITCH_TOKEN_PATH` | Yes | Path to the Twitch refresh token JSON file |
 
 ### Client (`apps/client/.env`)
 

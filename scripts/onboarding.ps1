@@ -370,9 +370,11 @@ function Write-NextSteps {
   Write-Host '     pnpm --filter @mrmittens/server start:dev'
   Write-Host '  5. Start only the web client with:'
   Write-Host '     pnpm --filter client dev'
-  Write-Host '  6. Desktop app note: this branch does not currently contain an Electron app workspace, so there is no desktop run command yet.'
-  Write-Host '  7. Manual auth setup still required:'
-  Write-Host '     - Register a Twitch app and create apps/server/tokens.notslugbubby.json'
+  Write-Host '  6. Use the guided CLI if you want help filling in env values:'
+  Write-Host '     .\slugBot.cmd onboard'
+  Write-Host '  7. Desktop app note: this branch does not currently contain an Electron app workspace, so there is no desktop run command yet.'
+  Write-Host '  8. Manual auth setup still required:'
+  Write-Host '     - Register a Twitch app and create the JSON file from TWITCH_TOKEN_PATH'
   Write-Host '     - Run vercel login before deploying the client'
 }
 

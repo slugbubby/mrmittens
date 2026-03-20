@@ -4,6 +4,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.9",
   "scripts": {
+    "slugbot": ".\\slugBot.cmd",
     "onboarding:windows": ".\\scripts\\onboarding.cmd",
     "dev": "turbo run dev",
     "build": "turbo run build",

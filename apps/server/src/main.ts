@@ -28,6 +28,10 @@ const requireEnv = (name: string): string => {
 
 async function bootstrap() {
   requireEnv('DATABASE_URL');
+  const twitchChannelUsername = requireEnv('TWITCH_CHANNEL_USERNAME');
+  const twitchChannelDisplayName =
+    process.env.TWITCH_CHANNEL_DISPLAY_NAME?.trim() || twitchChannelUsername;
+  const tokenPath = process.env.TWITCH_TOKEN_PATH?.trim() || './tokens.bot.json';
 
   const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT ?? 3000);
@@ -41,14 +45,13 @@ async function bootstrap() {
     clientSecret: requireEnv('TWITCH_CLIENT_SECRET'),
   });
 
-  const TOKEN_PATH = './tokens.notslugbubby.json';
   const tokenData = JSON.parse(
-    await fs.readFile(TOKEN_PATH, 'utf-8'),
+    await fs.readFile(tokenPath, 'utf-8'),
   ) as AccessToken;
 
   twurpleAuth.onRefresh(async (_userId, newTokenData) => {
     await fs.writeFile(
-      TOKEN_PATH,
+      tokenPath,
       JSON.stringify(newTokenData, null, 4),
       'utf-8',
     );
@@ -59,9 +62,13 @@ async function bootstrap() {
   // --- Twitch bot ---
   const bot = new Bot({
     authProvider: twurpleAuth,
-    channels: ['slugbubby'],
+    channels: [twitchChannelUsername],
     commands: [slap, suplex, task, done],
   });
+
+  console.log(
+    `Mr. Mittens is listening in ${twitchChannelDisplayName} (@${twitchChannelUsername}) chat.`,
+  );
 
   bot.onMessage((_messageEvent) => {
     // placeholder for future global message handling (e.g. logging, moderation)

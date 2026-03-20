@@ -1,6 +1,6 @@
 # Mr. Mittens
 
-_slugbubby's stream helper_ -- a Twitch chatbot and task overlay for co-working streams.
+_A Twitch stream helper_ -- a chatbot and task overlay for co-working streams.
 
 Viewers type `!task fix the bug` in chat and the task appears on an OBS browser-source overlay in real time.
 
@@ -57,8 +57,28 @@ The script is idempotent and will:
 Manual prerequisites still required after onboarding:
 
 - PostgreSQL 15+ running locally, or an accessible PostgreSQL instance
-- a Twitch application plus a bot token file at `apps/server/tokens.notslugbubby.json`
+- a Twitch application plus a bot token file at the path configured in `TWITCH_TOKEN_PATH`
 - `vercel login` before deploying the web client
+
+### CLI
+
+If you want a guided setup that fills in the `.env` values too, use the local CLI wrapper:
+
+```powershell
+.\slugBot.cmd onboard
+```
+
+That is the Windows-friendly version of running `slugBot onboard` from the repo checkout.
+
+That command runs the onboarding script, then prompts for the important values like:
+
+- `DATABASE_URL`
+- `TWITCH_CLIENT_ID`
+- `TWITCH_CLIENT_SECRET`
+- `TWITCH_CHANNEL_USERNAME`
+- `TWITCH_CHANNEL_DISPLAY_NAME`
+- `TWITCH_TOKEN_PATH`
+- `API_URL`
 
 ## Quick Start
 
@@ -144,6 +164,9 @@ Both apps need `.env` files. See the `.env.example` in each app directory.
 | `PORT` | server | HTTP port (default `3000`) |
 | `TWITCH_CLIENT_ID` | server | Twitch OAuth client ID |
 | `TWITCH_CLIENT_SECRET` | server | Twitch OAuth client secret |
+| `TWITCH_CHANNEL_USERNAME` | server | Twitch login/channel name the bot should join |
+| `TWITCH_CHANNEL_DISPLAY_NAME` | server | Friendly streamer display name for local setup/logging |
+| `TWITCH_TOKEN_PATH` | server | Path to the Twitch refresh token JSON file |
 | `API_URL` | client | Backend base URL (e.g. `http://localhost:3000`) |
 
 ## Scripts
@@ -158,6 +181,7 @@ Run from the monorepo root:
 | `pnpm build` | Build all apps |
 | `pnpm lint` | Lint all apps |
 | `pnpm onboarding:windows` | Run the Windows onboarding wrapper |
+| `pnpm slugbot -- onboard` | Run the guided local setup CLI |
 
 ## License
 

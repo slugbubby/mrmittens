@@ -8,11 +8,16 @@ import {
   type TaskCommandRepository,
 } from './task-command.handlers';
 
+const defaultStreamerIdentity = {
+  twitchUsername: 'streamer_login',
+  displayName: 'Streamer Display',
+};
+
 const createUserRecord = (overrides: Partial<DbUserRecord> = {}): DbUserRecord => ({
   id: 'user-1',
   twitchId: 'twitch-user-1',
-  twitchUsername: 'slugbubby',
-  displayName: 'Slugbubby',
+  twitchUsername: defaultStreamerIdentity.twitchUsername,
+  displayName: defaultStreamerIdentity.displayName,
   createdAt: new Date('2026-01-01T00:00:00.000Z'),
   updatedAt: new Date('2026-01-01T00:00:00.000Z'),
   ...overrides,
@@ -46,8 +51,8 @@ const createRepository = (
 
 const identity = {
   userId: 'twitch-user-1',
-  userName: 'slugbubby',
-  userDisplayName: 'Slugbubby',
+  userName: defaultStreamerIdentity.twitchUsername,
+  userDisplayName: defaultStreamerIdentity.displayName,
 };
 
 describe('task command handlers', () => {
@@ -110,8 +115,8 @@ describe('task command handlers', () => {
 
       expect(repository.createUser).toHaveBeenCalledWith(
         'twitch-user-1',
-        'slugbubby',
-        'Slugbubby',
+        defaultStreamerIdentity.twitchUsername,
+        defaultStreamerIdentity.displayName,
       );
     });
   });
