@@ -11,7 +11,7 @@
  * @see https://orm.drizzle.team/docs/get-started/postgresql-new
  */
 
-import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
+import { InferSelectModel, InferInsertModel, relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 /**
@@ -73,3 +73,14 @@ export const messagesTable = pgTable('messages', {
 export type Message = InferSelectModel<typeof messagesTable>;
 /** Shape accepted by `INSERT` into the messages table. */
 export type NewMessage = InferInsertModel<typeof messagesTable>;
+
+export const tasksRelations = relations(tasksTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [tasksTable.userId],
+    references: [usersTable.id],
+  }),
+}));
+
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  tasks: many(tasksTable),
+}));

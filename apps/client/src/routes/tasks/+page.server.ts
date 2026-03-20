@@ -15,5 +15,9 @@ export async function load({ fetch }) {
 
 	if (!res.ok) throw error(500, 'Failed to fetch tasks');
 
-	return { tasks: await res.json() };
+	const tasks = await res.json();
+	// TODO generate drizzle types for shared usage
+	const tasksByUser = Object.groupBy(tasks, (task: any) => task.user.displayName);
+
+	return { tasksByUser };
 }

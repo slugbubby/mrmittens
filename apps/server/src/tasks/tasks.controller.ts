@@ -7,9 +7,11 @@
 
 import { Controller, Get } from '@nestjs/common';
 
-import { Task } from '../db/schema';
+import { Task, User } from '../db/schema';
 import { fetchTasks } from '../db/tasks';
 import { TasksService } from './tasks.service';
+
+type TaskWithUser = Task & { user: User };
 
 @Controller('tasks')
 export class TasksController {
@@ -17,7 +19,7 @@ export class TasksController {
 
   /** Return every task in the database (all users, all statuses). */
   @Get()
-  getTasks(): Promise<Task[]> {
+  getTasks(): Promise<TaskWithUser[]> {
     return fetchTasks();
   }
 }

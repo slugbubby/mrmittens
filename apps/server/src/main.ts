@@ -15,7 +15,7 @@ import 'dotenv/config';
 import { promises as fs } from 'fs';
 
 import { AppModule } from './app.module';
-import { slap, task } from './chatbot';
+import { slap, suplex, task } from './chatbot';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -49,7 +49,7 @@ async function bootstrap() {
   const bot = new Bot({
     authProvider: twurpleAuth,
     channels: ['slugbubby'],
-    commands: [slap, task],
+    commands: [slap, suplex, task],
   });
 
   bot.onMessage((_messageEvent) => {

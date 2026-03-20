@@ -6,12 +6,15 @@
  */
 
 import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq, isNull, isNotNull } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
 
-import { NewTask, Task, tasksTable } from './schema';
+import * as schema from './schema';
+import { NewTask, Task, tasksTable, User } from './schema';
 
-const db = drizzle(process.env.DATABASE_URL!);
+const db = drizzle(process.env.DATABASE_URL!, { schema });
+
+type TaskWithUser = Task & { user: User };
 
 /**
  * Fetch tasks from the database.
@@ -21,16 +24,16 @@ const db = drizzle(process.env.DATABASE_URL!);
  */
 export const fetchTasks = async (options?: {
   done: boolean;
-}): Promise<Task[]> => {
-  let query = db.select().from(tasksTable).$dynamic();
-
-  if (options?.done === true) {
-    query = query.where(isNotNull(tasksTable.doneAt));
-  } else if (options?.done === false) {
-    query = query.where(isNull(tasksTable.doneAt));
-  }
-
-  return query;
+}): Promise<TaskWithUser[]> => {
+  return db.query.tasksTable.findMany({
+    where:
+      options?.done === true
+        ? isNotNull(tasksTable.doneAt)
+        : options?.done === false
+          ? isNull(tasksTable.doneAt)
+          : undefined,
+    with: { user: true },
+  });
 };
 
 /**
