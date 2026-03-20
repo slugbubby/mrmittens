@@ -15,9 +15,20 @@ import 'dotenv/config';
 import { promises as fs } from 'fs';
 
 import { AppModule } from './app.module';
-import { slap, suplex, task } from './chatbot';
+import { done, slap, suplex, task } from './chatbot';
+
+const requireEnv = (name: string): string => {
+  const value = process.env[name]?.trim();
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value;
+};
 
 async function bootstrap() {
+  requireEnv('DATABASE_URL');
+
   const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT ?? 3000);
 
@@ -26,8 +37,8 @@ async function bootstrap() {
   // The token file is read on startup and re-written whenever Twurple
   // refreshes the access token, so the bot stays authenticated across restarts.
   const twurpleAuth = new RefreshingAuthProvider({
-    clientId: process.env.TWITCH_CLIENT_ID!,
-    clientSecret: process.env.TWITCH_CLIENT_SECRET!,
+    clientId: requireEnv('TWITCH_CLIENT_ID'),
+    clientSecret: requireEnv('TWITCH_CLIENT_SECRET'),
   });
 
   const TOKEN_PATH = './tokens.notslugbubby.json';
@@ -49,7 +60,7 @@ async function bootstrap() {
   const bot = new Bot({
     authProvider: twurpleAuth,
     channels: ['slugbubby'],
-    commands: [slap, suplex, task],
+    commands: [slap, suplex, task, done],
   });
 
   bot.onMessage((_messageEvent) => {
@@ -57,4 +68,7 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Failed to start Mr. Mittens.', error);
+  process.exit(1);
+});

@@ -3,23 +3,76 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import { TasksService } from './../src/tasks/tasks.service';
 
-describe('AppController (e2e)', () => {
+describe('TasksController (e2e)', () => {
   let app: INestApplication<App>;
+
+  const tasksService = {
+    getOverlayTasks: jest.fn().mockResolvedValue({
+      tasks: [
+        {
+          displayNumber: 1,
+          id: 'task-1',
+          text: 'Ship the OBS overlay',
+          createdAt: '2026-01-01T00:00:00.000Z',
+          user: {
+            id: 'user-1',
+            displayName: 'Slugbubby',
+            twitchUsername: 'slugbubby',
+          },
+        },
+      ],
+      groups: [
+        {
+          user: {
+            id: 'user-1',
+            displayName: 'Slugbubby',
+            twitchUsername: 'slugbubby',
+          },
+          tasks: [
+            {
+              displayNumber: 1,
+              id: 'task-1',
+              text: 'Ship the OBS overlay',
+              createdAt: '2026-01-01T00:00:00.000Z',
+              user: {
+                id: 'user-1',
+                displayName: 'Slugbubby',
+                twitchUsername: 'slugbubby',
+              },
+            },
+          ],
+        },
+      ],
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    }),
+  };
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(TasksService)
+      .useValue(tasksService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  afterEach(async () => {
+    await app.close();
+  });
+
+  it('/tasks (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/tasks')
       .expect(200)
-      .expect('Hello World!');
+      .expect(({ body }) => {
+        expect(body.tasks).toHaveLength(1);
+        expect(body.groups).toHaveLength(1);
+        expect(body.tasks[0].displayNumber).toBe(1);
+      });
   });
 });

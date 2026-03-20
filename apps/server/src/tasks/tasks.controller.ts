@@ -6,20 +6,17 @@
  */
 
 import { Controller, Get } from '@nestjs/common';
+import type { TasksOverlayResponse } from '@mrmittens/shared';
 
-import { Task, User } from '../db/schema';
-import { fetchTasks } from '../db/tasks';
 import { TasksService } from './tasks.service';
-
-type TaskWithUser = Task & { user: User };
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  /** Return every task in the database (all users, all statuses). */
+  /** Return the current open-task overlay payload for the browser source. */
   @Get()
-  getTasks(): Promise<TaskWithUser[]> {
-    return fetchTasks();
+  getTasks(): Promise<TasksOverlayResponse> {
+    return this.tasksService.getOverlayTasks();
   }
 }
