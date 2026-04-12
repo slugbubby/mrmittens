@@ -15,6 +15,9 @@ export const fetchTasks = async () => {
   });
 };
 
+type TasksWithUser = Awaited<ReturnType<typeof fetchTasks>>;
+export type TaskWithUser = TasksWithUser[number];
+
 export const createTask = async (
   userId: string,
   text: string,
