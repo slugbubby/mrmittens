@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { Task } from '../db/schema';
 import { fetchTasks } from '../db/tasks';
 import { TasksService } from './tasks.service';
 
@@ -9,7 +8,7 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {} // use this.tasksService.methodName()
 
   @Get()
-  getTasks(): Promise<Task[]> {
+  getTasks() {
     return fetchTasks();
   }
 }
