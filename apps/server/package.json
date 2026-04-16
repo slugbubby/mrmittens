@@ -82,6 +82,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
-  }
+    "testEnvironment": "node",
+    "exports": {
+      "./schema": "./src/db/schema.ts",
+      "./tasks": "./src/db/tasks.ts",
+      "./users": "./src/db/users.ts"
+    }
 }
