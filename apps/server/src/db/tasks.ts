@@ -2,8 +2,8 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 
-import * as schema from './schema';
-import { NewTask, Task, tasksTable, User } from './schema';
+import * as schema from '@mrmittens/db';
+import { NewTask, Task, tasksTable, User } from '@mrmittens/db';
 
 const db = drizzle(process.env.DATABASE_URL!, { schema });
 

@@ -16,6 +16,10 @@ importers:
         version: 5.9.3
 
   apps/client:
+    dependencies:
+      '@mrmittens/db':
+        specifier: workspace:*
+        version: link:../../shared/db
     devDependencies:
       '@eslint/compat':
         specifier: ^2.0.2
@@ -71,6 +75,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@mrmittens/db':
+        specifier: workspace:*
+        version: link:../../shared/db
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.7(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -108,7 +115,7 @@ importers:
         specifier: ^17.2.3
         version: 17.2.3
       drizzle-orm:
-        specifier: ^0.44.6
+        specifier: 0.44.6
         version: 0.44.6(@types/pg@8.15.6)(kysely@0.28.11)(pg@8.16.3)(postgres@3.4.7)
       pg:
         specifier: ^8.16.3
@@ -201,6 +208,16 @@ importers:
       typescript-eslint:
         specifier: ^8.20.0
         version: 8.46.2(eslint@9.38.0)(typescript@5.9.3)
+
+  shared/db:
+    dependencies:
+      drizzle-orm:
+        specifier: 0.44.6
+        version: 0.44.6(@types/pg@8.15.6)(kysely@0.28.11)(pg@8.16.3)(postgres@3.4.7)
+    devDependencies:
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
 
 packages:
 
